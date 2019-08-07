@@ -36,35 +36,7 @@ class TreeHandler(IPythonHandler):
 
     @web.authenticated
     def get(self, path=''):
-        path = path.strip('/')
-        cm = self.contents_manager
-        
-        if cm.dir_exists(path=path):
-            if cm.is_hidden(path) and not cm.allow_hidden:
-                self.log.info("Refusing to serve hidden directory, via 404 Error")
-                raise web.HTTPError(404)
-            breadcrumbs = self.generate_breadcrumbs(path)
-            page_title = self.generate_page_title(path)
-            self.write(self.render_template('tree.html',
-                page_title=page_title,
-                notebook_path=path,
-                breadcrumbs=breadcrumbs,
-                terminals_available=self.settings['terminals_available'],
-                server_root=self.settings['server_root_dir'],
-                shutdown_button=self.settings.get('shutdown_button', False)
-            ))
-        elif cm.file_exists(path):
-            # it's not a directory, we have redirecting to do
-            model = cm.get(path, content=False)
-            # redirect to /api/notebooks if it's a notebook, otherwise /api/files
-            service = 'notebooks' if model['type'] == 'notebook' else 'files'
-            url = url_path_join(
-                self.base_url, service, url_escape(path),
-            )
-            self.log.debug("Redirecting %s to %s", self.request.path, url)
-            self.redirect(url)
-        else:
-            raise web.HTTPError(404)
+        raise web.HTTPError(404)
 
 
 #-----------------------------------------------------------------------------

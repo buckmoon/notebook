@@ -107,7 +107,7 @@
 
 </head>
 
-<body class="{% block bodyclasses %}{% endblock %}"
+<body id="miw" class="{% block bodyclasses %}{% endblock %}"
  {% block params %}
   {% if logged_in and token %}
     data-jupyter-api-token="{{token | urlencode}}"
@@ -124,30 +124,30 @@ dir="ltr">
 
 <div id="header">
   <div id="header-container" class="container">
-  <div id="ipython_notebook" class="nav navbar-brand"><a href="{{default_url}}
-    {%- if logged_in and token -%}?token={{token}}{%- endif -%}" title='{% trans %}dashboard{% endtrans %}'>
-      {% block logo %}<img src='{{static_url("base/images/logo.png") }}' alt='Jupyter Notebook'/>{% endblock %}
-  </a></div>
+    <div class="header-back">
+      {% block login_widget %}
+      <span id="login_widget">
+        {% if logged_in %}
+          <button id="logout" class="mw-m--button simple"><i class="fa fa-angle-double-left"></i></button>
+        {% elif login_available and not logged_in %}
+          <button id="login" class="btn btn-sm navbar-btn">{% trans %}Login{% endtrans %}</button>
+        {% endif %}
+      </span>
+      {% endblock %}
+    </div>
+    <!-- <div id="ipython_notebook" class="nav navbar-brand">
+      <a href="{{default_url}}
+      {%- if logged_in and token -%}?token={{token}}{%- endif -%}" title='{% trans %}dashboard{% endtrans %}'>
+        {% block logo %}<img src='{{static_url("base/images/logo.png") }}' alt='Jupyter Notebook'/>{% endblock %}
+      </a>
+    </div> -->
 
   {% block headercontainer %}
   {% endblock %}
-  
+
   {% block header_buttons %}
-  
-  {% block login_widget %}
-
-    <span id="login_widget">
-      {% if logged_in %}
-        <button id="logout" class="btn btn-sm navbar-btn">{% trans %}Logout{% endtrans %}</button>
-      {% elif login_available and not logged_in %}
-        <button id="login" class="btn btn-sm navbar-btn">{% trans %}Login{% endtrans %}</button>
-      {% endif %}
-    </span>
-
-  {% endblock %}
-
   {% endblock header_buttons %}
-  
+
   </div>
   <div class="header-bar"></div>
 

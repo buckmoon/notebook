@@ -34,25 +34,37 @@ data-notebook-name="{{notebook_name | urlencode}}"
 data-notebook-path="{{notebook_path | urlencode}}"
 {% endblock %}
 
-
 {% block headercontainer %}
-
-
-<span id="save_widget" class="save_widget">
-    <span id="notebook_name" class="filename"></span>
-    <span class="checkpoint_status"></span>
-    <span class="autosave_status"></span>
-</span>
-
-<span id="kernel_logo_widget">
-  {% block kernel_logo_widget %}
-  <img class="current_kernel_logo" alt="Current Kernel Logo" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"/>
-  {% endblock %}
-</span>
-
-{% endblock headercontainer %}
+<div class="header-title">
+  <span id="save_widget" class="save_widget">
+      <span id="notebook_name" class="filename"></span>
+      <span class="checkpoint_status"></span>
+      <span class="autosave_status"></span>
+  </span>
+</div>
+<div>
+  <span id="notification_area"></span>
+</div>
+<div>
+  <!-- インジケーター（Notebookデフォルト）-->
+  <div id="kernel_indicator" class="indicator_area">
+    <span class="kernel_indicator_name">{% trans %}Kernel{% endtrans %}</span>
+    <i id="kernel_indicator_icon"></i>
+  </div>
+  <i id="readonly-indicator" title='{% trans %}This notebook is read-only{% endtrans %}'>
+    <span class="fa-stack">
+      <i class="fa fa-save fa-stack-1x"></i>
+      <i class="fa fa-ban fa-stack-2x text-danger"></i>
+    </span>
+  </i>
+</div>
+<div>
+  <div class="mw-m--button positive"><i class="icon-mwmodel"></i> モデルをエクスポート</div>
+</div>
+{% endblock %}
 
 {% block header %}
+
 <div id="menubar-container" class="container">
 <div id="menubar">
     <div id="menus" class="navbar navbar-default" role="navigation">
@@ -61,38 +73,13 @@ data-notebook-path="{{notebook_path | urlencode}}"
               <i class="fa fa-bars"></i>
               <span class="navbar-text">{% trans %}Menu{% endtrans %}</span>
             </button>
-            <p id="kernel_indicator" class="navbar-text indicator_area">
-              <span class="kernel_indicator_name">{% trans %}Kernel{% endtrans %}</span>
-              <i id="kernel_indicator_icon"></i>
-            </p>
-            <i id="readonly-indicator" class="navbar-text" title='{% trans %}This notebook is read-only{% endtrans %}'>
-                <span class="fa-stack">
-                    <i class="fa fa-save fa-stack-1x"></i>
-                    <i class="fa fa-ban fa-stack-2x text-danger"></i>
-                </span>
-            </i>
+
             <i id="modal_indicator" class="navbar-text"></i>
-            <span id="notification_area"></span>
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav">
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans %}File{% endtrans %}</a>
                     <ul id="file_menu" class="dropdown-menu">
-                        <li id="new_notebook" class="dropdown-submenu">
-                            <a href="#">{% trans %}New Notebook{% endtrans %}</a>
-                            <ul class="dropdown-menu" id="menu-new-notebook-submenu"></ul>
-                        </li>
-                        <li id="open_notebook"
-                            title="{% trans %}Opens a new window with the Dashboard view{% endtrans %}">
-                            <a href="#">{% trans %}Open...{% endtrans %}</a></li>
                         <!-- <hr/> -->
-                        <li class="divider"></li>
-                        <li id="copy_notebook"
-                            title="{% trans %}Open a copy of this notebook's contents and start a new kernel{% endtrans %}">
-                            <a href="#">{% trans %}Make a Copy...{% endtrans %}</a></li>
-                        <li id="save_notebook_as"
-                            title="{% trans %}Save a copy of the notebook's contents and start a new kernel{% endtrans %}">
-                            <a href="#">{% trans %}Save as...{% endtrans %}</a></li>
-                        <li id="rename_notebook"><a href="#">{% trans %}Rename...{% endtrans %}</a></li>
                         <li id="save_checkpoint"><a href="#">{% trans %}Save and Checkpoint{% endtrans %}</a></li>
                         <!-- <hr/> -->
                         <li class="divider"></li>
@@ -105,25 +92,7 @@ data-notebook-path="{{notebook_path | urlencode}}"
                             <li><a href="#"></a></li>
                           </ul>
                         </li>
-                        <li class="divider"></li>
-                        <li id="print_preview"><a href="#">{% trans %}Print Preview{% endtrans %}</a></li>
-                        <li class="dropdown-submenu"><a href="#">{% trans %}Download as{% endtrans %}</a>
-                            <ul id="download_menu" class="dropdown-menu">
-                                <li id="download_ipynb"><a href="#">{% trans %}Notebook (.ipynb){% endtrans %}</a></li>
-                                <li id="download_script"><a href="#">{% trans %}Script{% endtrans %}</a></li>
-                                <li id="download_html"><a href="#">{% trans %}HTML (.html){% endtrans %}</a></li>
-                                <li id="download_slides"><a href="#">{% trans %}Reveal.js slides (.html){% endtrans %}</a></li>
-                                <li id="download_markdown"><a href="#">{% trans %}Markdown (.md){% endtrans %}</a></li>
-                                <li id="download_rst"><a href="#">{% trans %}reST (.rst){% endtrans %}</a></li>
-                                <li id="download_latex"><a href="#">{% trans %}LaTeX (.tex){% endtrans %}</a></li>
-                                <li id="download_pdf"><a href="#">{% trans %}PDF via LaTeX (.pdf){% endtrans %}</a></li>
-                                {% for exporter in get_custom_frontend_exporters() %}
-                                <li id="download_{{ exporter.name }}">
-                                    <a href="#">{{ exporter.display }}</a>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
+                        <!-- <li class="divider"></li> -->
                         <li class="dropdown-submenu hidden"><a href="#">{% trans %}Deploy as{% endtrans %}</a>
                             <ul id="deploy_menu" class="dropdown-menu"></ul>
                         </li>
@@ -131,10 +100,6 @@ data-notebook-path="{{notebook_path | urlencode}}"
                         <li id="trust_notebook"
                             title="{% trans %}Trust the output of this notebook{% endtrans %}">
                             <a href="#" >{% trans %}Trust Notebook{% endtrans %}</a></li>
-                        <li class="divider"></li>
-                        <li id="close_and_halt"
-                            title="{% trans %}Shutdown this notebook's kernel, and close this window{% endtrans %}">
-                            <a href="#" >{% trans %}Close and Halt{% endtrans %}</a></li>
                     </ul>
                 </li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans %}Edit{% endtrans %}</a>
@@ -154,15 +119,11 @@ data-notebook-path="{{notebook_path | urlencode}}"
                         <li id="move_cell_up"><a href="#">{% trans %}Move Cell Up{% endtrans %}</a></li>
                         <li id="move_cell_down"><a href="#">{% trans %}Move Cell Down{% endtrans %}</a></li>
                         <li class="divider"></li>
-                        <li id="edit_nb_metadata"><a href="#">{% trans %}Edit Notebook Metadata{% endtrans %}</a></li>
-                        <li class="divider"></li>
                         <li id="find_and_replace"><a href="#"> {% trans %}Find and Replace{% endtrans %} </a></li>
                         <li class="divider"></li>
                         <li id="cut_cell_attachments"><a href="#">{% trans %}Cut Cell Attachments{% endtrans %}</a></li>
                         <li id="copy_cell_attachments"><a href="#">{% trans %}Copy Cell Attachments{% endtrans %}</a></li>
                         <li id="paste_cell_attachments" class="disabled"><a href="#">{% trans %}Paste Cell Attachments{% endtrans %}</a></li>
-                        <li class="divider"></li>
-                        <li id="insert_image" class="disabled"><a href="#"> {% trans %}Insert Image{% endtrans %} </a></li>
                     </ul>
                 </li>
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans %}View{% endtrans %}</a>
@@ -296,7 +257,6 @@ data-notebook-path="{{notebook_path | urlencode}}"
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans %}Help{% endtrans %}</a>
                     <ul  id="help_menu" class="dropdown-menu">
                         {% block help %}
-                        <li id="notebook_tour" title="{% trans %}A quick tour of the notebook user interface{% endtrans %}"><a href="#">{% trans %}User Interface Tour{% endtrans %}</a></li>
                         <li id="keyboard_shortcuts" title="{% trans %}Opens a tooltip with all keyboard shortcuts{% endtrans %}"><a href="#">{% trans %}Keyboard Shortcuts{% endtrans %}</a></li>
                         <li id="edit_keyboard_shortcuts" title="{% trans %}Opens a dialog allowing you to edit Keyboard shortcuts{% endtrans %}"><a href="#">{% trans %}Edit Keyboard Shortcuts{% endtrans %}</a></li>
                         <li class="divider"></li>
@@ -341,19 +301,194 @@ data-notebook-path="{{notebook_path | urlencode}}"
   </div>
 </div>
 </div>
-
-<div class="lower-header-bar"></div>
 {% endblock header %}
 
 {% block site %}
-
-<div id="ipython-main-app">
-    <div id="notebook_panel">
-        <div id="notebook"></div>
-        <div id='tooltip' class='ipython_tooltip' style='display:none'></div>
-    </div>
+<div class="mw-m--nbook-body">
+  <div id="ipython-main-app" class="body-main">
+      <div id="notebook_panel">
+          <div id="notebook"></div>
+          <div id='tooltip' class='ipython_tooltip' style='display:none'></div>
+      </div>
+  </div>
+  <div class="mw-m--nbook-sidebar">
+      <!-- サイドバータブ（データセット）-->
+      <div class="sidebar-scroll">
+        <div class="mw-dataset" data-tab-target="datasets">
+          <div class="sidebar-inner">
+            <div class="dataset-items">
+              <div class="dataset-item" id="selected_dataset_group_info" style="display:none;">
+                <div class="dataset-action" id="reselect_dataset_group_btn">
+                  <i class="fa fa-times"></i>
+                </div>
+                <div class="dataset-name">
+                  <div class="mw-m--label-icon dataset">
+                    <span class="icon">
+                      <i class="icon-mwdatasetgroup"></i>
+                    </span>
+                    <span class="name black" id="selected_group_name">Dataset Group Name</span>
+                  </div>
+                </div>
+                <div class="dataset-tabledetail">
+                  <div class="list" data-toggle="collapse" data-target="#table-profile" aria-expanded="false">
+                    <div class="list-title">
+                      <i class="icon fa fa-table"></i> profile
+                    </div>
+                    <div class="dataset-table-column collapse" id="table-profile">
+                      <div>gender</div>
+                      <div>age</div>
+                      <div>height</div>
+                      <div>weight</div>
+                      <div>location</div>
+                    </div>
+                  </div>
+                  <div class="list" data-toggle="collapse" data-target="#table-mw100">
+                    <div class="list-title">
+                      <i class="icon fa fa-table"></i> mw100
+                    </div>
+                    <div class="dataset-table-column collapse" id="table-mw100">
+                      <div>time</div>
+                      <div>eda_1</div>
+                      <div>eda_2</div>
+                      <div>ppg_g</div>
+                      <div>ppg_r</div>
+                      <div>ppg_ir</div>
+                      <div>x_axis</div>
+                      <div>y_axis</div>
+                      <div>z_axis</div>
+                      <div>thermo</div>
+                    </div>
+                  </div>
+                  <div class="list" data-toggle="collapse" data-target="#table-mobile">
+                    <div class="list-title">
+                      <i class="icon fa fa-table"></i> mobile
+                    </div>
+                    <div class="dataset-table-column collapse" id="table-mobile">
+                      <div>time</div>
+                      <div>x_axl</div>
+                      <div>y_axl</div>
+                      <div>x_gyr</div>
+                      <div>y_gyr</div>
+                      <div>x_mag</div>
+                      <div>y_mag</div>
+                      <div>x_qtn</div>
+                      <div>y_qtn</div>
+                      <div>z_qtn</div>
+                      <div>w_qtn</div>
+                    </div>
+                  </div>
+                  <div class="list" data-toggle="collapse" data-target="#table-notifications">
+                    <div class="list-title">
+                      <i class="icon fa fa-table"></i> notifications
+                    </div>
+                    <div class="dataset-table-column collapse" id="table-notifications">
+                      <div>start_date</div>
+                      <div>end_date</div>
+                      <div>title</div>
+                      <div>message</div>
+                      <div>key</div>
+                    </div>
+                  </div>
+                  <div class="list" data-toggle="collapse" data-target="#table-weather">
+                    <div class="list-title">
+                      <i class="icon fa fa-table"></i> weather
+                    </div>
+                    <div class="dataset-table-column collapse" id="table-weather">
+                      <div>time</div>
+                      <div>temperature</div>
+                      <div>pressure</div>
+                    </div>
+                  </div>
+                  <div class="list" data-toggle="collapse" data-target="#table-fitbit">
+                    <div class="list-title">
+                      <i class="fa fa-table"></i> fitbit
+                    </div>
+                    <div class="dataset-table-column collapse" id="table-fitbit">
+                      <div>time</div>
+                    </div>
+                  </div>
+                  <div class="list" data-toggle="collapse" data-target="#table-admin">
+                    <div class="list-title">
+                      <i class="icon fa fa-table"></i> admin
+                    </div>
+                    <div class="dataset-table-column collapse" id="table-admin">
+                      <div>time</div>
+                      <div>gps</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mw-m--lists mw-m--mb-1x">
+                  <div class="list">
+                    <div class="sub list-width-60">
+                      Datasets
+                    </div>
+                    <div class="list-content" id="selected_group_count">
+                      9999
+                    </div>
+                  </div>
+                  <div class="list">
+                    <div class="sub list-width-60">
+                      Author
+                    </div>
+                    <div class="list-content" id="selected_group_owner">
+                      Display Name
+                    </div>
+                  </div>
+                  <div class="list">
+                    <div class="sub list-width-60">
+                      Status
+                    </div>
+                    <div class="list-content">
+                      <div class="mw-m--status public">Public</div>
+                    </div>
+                  </div>
+                  <div class="list">
+                    <div class="sub list-width-60">
+                    </div>
+                    <div class="list-content">
+                      <a href="#">more details...</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="dataset-path">
+                  <div class="path">miw.DatasetGroup</div>
+                  <div class="button"><i class="fa fa-copy"></i></div>
+                </div>
+              </div>
+              <div class="dataset-item blank" id="select_dataset_group">
+                <div class="dataset-blank-message">
+                  データセットグループを<br>選択してください。<br>（未選択の場合だけ表示）
+                </div>
+                <div>
+                  <div class="mw-m--button mw-j--modal" id="selectDatasetModel">データセットを選択</div>
+                </div>
+              </div>
+              <div class="dataset-item">
+                <div class="dataset-name">
+                  <div class="mw-m--label-icon">
+                    <span class="icon mlproject">
+                      <i class="icon-mwmlproject"></i>
+                    </span>
+                    <span class="name black">Project Details</span>
+                  </div>
+                </div>
+                <div class="mw-m--lists mw-m--mb-1x">
+                  <div class="list">
+                    <div class="sub list-width-60">
+                      Storage
+                    </div>
+                    <div class="list-content">
+                      <a href="#">Show Details</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
 </div>
-
 
 {% endblock %}
 
@@ -366,7 +501,46 @@ data-notebook-path="{{notebook_path | urlencode}}"
     <div id='pager-button-area'></div>
 </div>
 
+<!-- モーダル：データセットグループの選択 -->
+<section class="mw-m--modal alphablack" style="display:none;" id="selectDatasetModel-target">
+  <div class="mw-m--modal-window compact" style="display:none;">
+    <div class="header">
+      <div class="title">Release Model</div>
+      <div class="mw-m--mt-5x">
+        <div class="mw-m--filter">
+          <input class="mw-m--form text mw-m--mr-3x width-8x" type="text" placeholder="Search items...">
+          <div class="mw-m--tab-mini">
+            <div class="button basic active">Created</div>
+            <div class="button basic">Starred</div>
+            <div class="button basic">Explore</div>
+          </div>
+        </div>
+      </div>
+      <div class="action">
+        <div class="mw-j--modal-close">Close</div>
+      </div>
+    </div>
+    <div class="body scroll">
+      <div class="mw-m--table mini normal fit">
+       <table id="dataset_group_container">
+         <tr>
+           <th>NAME</th>
+           <th width="40" class="center"><i class="icon-star-outlined"></i></th>
+           <th>OWNER</th>
+           <th width="100">ITEMS</th>
+           <th width="100">STATUS</th>
+           <th width="120">DATE</th>
+           <th width="120"></th>
+         </tr>
+       </table>
+     </div>
+    </div>
+  </div>
+</section>
+
 {% endblock %}
+
+
 
 {% block script %}
 {{super()}}
@@ -374,8 +548,238 @@ data-notebook-path="{{notebook_path | urlencode}}"
     sys_info = {{sys_info|safe}};
 </script>
 
-<script src="{{ static_url("components/text-encoding/lib/encoding.js") }}" charset="utf-8"></script>
+<script src='{{ static_url("components/text-encoding/lib/encoding.js") }}' charset="utf-8"></script>
 
 <script src="{{ static_url("notebook/js/main.min.js") }}" type="text/javascript" charset="utf-8"></script>
+
+<!-- とりあえずここにスクリプト記載 -->
+<form id="hidden_form">
+<input id="miw_json_data" type="hidden" name="miw_json_data" value="{{ miw['json_data'] }}" />
+</form>
+<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+<script id="template" type="text/x-jquery-tmpl">
+<tr>
+ <td>
+   <div class="mw-m--label-icon dataset">
+     <span class="icon">
+       <i class="icon-mwdatasetgroup"></i>
+     </span>
+     <span class="name black">${name}</span>
+   </div>
+ </td>
+ <td>
+   <span class="mw-m--star-on"><i v-bind:class="{ \'icon-star\': dataset.is_bookmark }"></i></span>
+ </td>
+ <td>${owner_name}</td>
+ <td>${raw_data_count}</td>
+ <td><span class="mw-m--status public">Public</span></td>
+ <td>Arb 99, 2018</td>
+ <td><div class="mw-m--button small mw-j--modal-close selectDataset" data-dataset-group-id="${id}">選択</div></td>
+</tr>
+</script>
+
+<script>
+var json_data;
+
+// 2018/10/06 MOD HUG) y.suzuki
+var temp1 = location.href;
+var searchTermExt = '.ipynb';
+var ext_pos = temp1.lastIndexOf(searchTermExt);
+var dir_pos = temp1.lastIndexOf('/',ext_pos);
+var dirname = temp1.substring(dir_pos, ext_pos);
+var access_token = '{{ miw['password'] }}';
+
+//var dirname = "{{ miw['dirname'] }}";
+// 2018/10/06 MOD HUG) y.suzuki
+
+
+var miw_dataset_group_id = "";
+
+$(function() {
+  (function () {
+    json_data = $("#miw_json_data").val();
+
+    var dataset_groups = {};
+
+    getDataset().then(function(data) {
+        parseDataset(data);
+    });
+  })();
+
+  //共通のモーダルを表示（パーツ化）
+  $('.mw-j--modal').click(function() {
+    targetId = $(this).attr('id')
+    target = '#' + targetId + '-target'
+    $(target).fadeIn('fast')
+    setTimeout(function() {
+      $('.mw-m--modal-window', target).fadeIn('fast')
+    }, 300)
+  })
+
+  //共通のモーダルを非表示
+  $('.mw-j--modal-close').click(function(e) {
+    $(e.target)
+      .closest('.mw-m--modal-window')
+      .fadeOut('fast')
+    setTimeout(function() {
+      $(e.target)
+        .closest('.mw-m--modal')
+        .fadeOut('fast')
+    }, 300)
+  })
+
+  $('.mw-m--button.positive').click(function() {
+    var base_url = getServerName("{{ miw['callback_url'] }}");
+    window.location.href = base_url + 'models/import_from' + dirname;
+  })
+
+  miw_dataset_group_id = getParam("miw_dataset_group_id")
+})
+
+/**
+ * Get the URL parameter value
+ *
+ * @param  name {string} パラメータのキー文字列
+ * @return  url {url} 対象のURL文字列（任意）
+ */
+function getParam(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function updateParam(name, param, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var new_url = url.replace(/(selected_dataset_group=).*/,'$1' + param);
+    window.history.replaceState({}, "", new_url);
+    return;
+}
+
+var default_options = {
+    type: 'GET',
+    contentType: "application/json",
+    cache: false,
+    dataType : "json",
+    processData: false,
+    success: null,
+    error: null,
+    headers:{
+        Authorization: 'Bearer ' + '{{ miw['password'] }}'
+    },
+};
+
+function getServerName(url) {
+    var splited = url.split('/');
+
+    return splited[0] + '//' + splited[2] + '/';
+}
+
+function update(d1, d2) {
+    $.map(d2, function (i, key) {
+        d1[key] = d2[key];
+    });
+    return d1;
+};
+
+function ajaxDefaults(options) {
+    var d = {};
+    update(d, default_options);
+    update(d, options);
+    return d;
+};
+
+function railsApiRequest(path, options) {
+    options = options || {};
+    options = ajaxDefaults(options || {});
+
+    var base_url = getServerName("{{ miw['callback_url'] }}");
+    var url = base_url + 'api/v1' + path;
+
+    return $.ajax(url, options);
+}
+
+function getDataset() {
+    return railsApiRequest("/dataset_groups/index?", {});
+}
+
+function selectedDataset(ml_project_id, dataset_group_id) {
+    return railsApiRequest("/ml_projects" + ml_project_id + "/select_raw_data_group/" + dataset_group_id,
+    { type: 'POST'}
+     );
+}
+
+function parseDataset(data) {
+    // モックから解析するテスト
+    // dataset_groups = mock_yasubei_datasets["content"]["data"];
+
+    var dataset_groups = data["content"]["data"];
+    var selected_group;
+    var selected_id = getParam("selected_dataset_group");
+
+    dataset_groups.forEach(function (g) {
+      $('#template').tmpl(g).appendTo("#dataset_group_container");
+    });
+
+    $(".selectDataset").on("click", function () {
+      //共通のモーダルを非表示
+      $("#selectDatasetModel-target")
+        .closest('.mw-m--modal-window')
+        .fadeOut('fast')
+      setTimeout(function() {
+        $("#selectDatasetModel-target")
+          .closest('.mw-m--modal')
+          .fadeOut('fast')
+      }, 300)
+
+    var selected_id = $(this).data("dataset-group-id");
+    updateDataset(dataset_groups, selected_id);
+    selectedDataset(dirname, selected_id);
+    updateParam("selected_dataset_group", selected_id);
+    });
+
+    $("#reselect_dataset_group_btn").on("click", function () {
+      $(".sidebar-inner").fadeOut(300);
+      setTimeout(function() {
+        $("#select_dataset_group").show();
+        $("#selected_dataset_group_info").hide();
+      }, 300)
+      setTimeout(function() {
+        $(".sidebar-inner").fadeIn("fast");
+      }, 400)
+    });
+    // 0番目のDataSetを事前に選択する処理
+    updateDataset(dataset_groups, selected_id);
+}
+
+function updateDataset(dataset_groups, id){
+  miw_dataset_group_id = id;
+  selected_group = dataset_groups.find(function (g) {
+    return g.id == miw_dataset_group_id;
+  });
+  $("#selected_group_name").html(selected_group.name);
+  $("#selected_group_count").html(selected_group.raw_data_count);
+
+  // 2018/11/24 17:01
+  $("#selected_group_owner").html(selected_group.user);
+
+  setTimeout(function() {
+    $(".sidebar-inner").fadeOut(300);
+  }, 800)
+  setTimeout(function() {
+    $("#select_dataset_group").hide();
+    $("#selected_dataset_group_info").show();
+  }, 1100)
+  setTimeout(function() {
+    $(".sidebar-inner").fadeIn("fast");
+  }, 1500)
+
+}
+</script>
+
 
 {% endblock %}
