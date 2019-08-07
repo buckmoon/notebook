@@ -125,18 +125,19 @@ class ContentsHandler(APIHandler):
         model = yield gen.maybe_future(cm.update(model, path))
         validate_model(model, expect_content=False)
         self._finish_model(model)
-    
+
     @gen.coroutine
     def _copy(self, copy_from, copy_to=None):
         """Copy a file, optionally specifying a target directory."""
-        self.log.info(u"Copying {copy_from} to {copy_to}".format(
-            copy_from=copy_from,
-            copy_to=copy_to or '',
-        ))
-        model = yield gen.maybe_future(self.contents_manager.copy(copy_from, copy_to))
-        self.set_status(201)
-        validate_model(model, expect_content=False)
-        self._finish_model(model)
+        # self.log.info(u"Copying {copy_from} to {copy_to}".format(
+        #     copy_from=copy_from,
+        #     copy_to=copy_to or '',
+        # ))
+        # model = yield gen.maybe_future(self.contents_manager.copy(copy_from, copy_to))
+        # self.set_status(201)
+        # validate_model(model, expect_content=False)
+        # self._finish_model(model)
+        raise web.HTTPError(409, u'You can not copy: %s' % copy_from)
 
     @gen.coroutine
     def _upload(self, model, path):
@@ -146,22 +147,23 @@ class ContentsHandler(APIHandler):
         self.set_status(201)
         validate_model(model, expect_content=False)
         self._finish_model(model)
-    
+
     @gen.coroutine
     def _new_untitled(self, path, type='', ext=''):
         """Create a new, empty untitled entity"""
-        self.log.info(u"Creating new %s in %s", type or 'file', path)
-        model = yield gen.maybe_future(self.contents_manager.new_untitled(path=path, type=type, ext=ext))
-        self.set_status(201)
-        validate_model(model, expect_content=False)
-        self._finish_model(model)
-    
+        raise web.HTTPError(409, u'You can not make new untitled file: %s' % path)
+        # self.log.info(u"Creating new %s in %s", type or 'file', path)
+        # model = yield gen.maybe_future(self.contents_manager.new_untitled(path=path, type=type, ext=ext))
+        # self.set_status(201)
+        # validate_model(model, expect_content=False)
+        # self._finish_model(model)
+
     @gen.coroutine
     def _save(self, model, path):
         """Save an existing file."""
-        chunk = model.get("chunk", None) 
+        chunk = model.get("chunk", None)
         if not chunk or chunk == -1:  # Avoid tedious log information
-            self.log.info(u"Saving file at %s", path)  
+            self.log.info(u"Saving file at %s", path)
         model = yield gen.maybe_future(self.contents_manager.save(model, path))
         validate_model(model, expect_content=False)
         self._finish_model(model)

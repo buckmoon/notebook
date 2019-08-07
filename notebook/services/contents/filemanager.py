@@ -557,26 +557,27 @@ class FileContentsManager(FileManagerMixin, ContentsManager):
 
     def rename_file(self, old_path, new_path):
         """Rename a file."""
-        old_path = old_path.strip('/')
-        new_path = new_path.strip('/')
-        if new_path == old_path:
-            return
-
-        new_os_path = self._get_os_path(new_path)
-        old_os_path = self._get_os_path(old_path)
-
-        # Should we proceed with the move?
-        if os.path.exists(new_os_path) and not samefile(old_os_path, new_os_path):
-            raise web.HTTPError(409, u'File already exists: %s' % new_path)
-
-        # Move the file
-        try:
-            with self.perm_to_403():
-                shutil.move(old_os_path, new_os_path)
-        except web.HTTPError:
-            raise
-        except Exception as e:
-            raise web.HTTPError(500, u'Unknown error renaming file: %s %s' % (old_path, e))
+        raise web.HTTPError(409, u'You can not rename: %s' % old_path)
+        # old_path = old_path.strip('/')
+        # new_path = new_path.strip('/')
+        # if new_path == old_path:
+        #     return
+        #
+        # new_os_path = self._get_os_path(new_path)
+        # old_os_path = self._get_os_path(old_path)
+        #
+        # # Should we proceed with the move?
+        # if os.path.exists(new_os_path) and not samefile(old_os_path, new_os_path):
+        #     raise web.HTTPError(409, u'File already exists: %s' % new_path)
+        #
+        # # Move the file
+        # try:
+        #     with self.perm_to_403():
+        #         shutil.move(old_os_path, new_os_path)
+        # except web.HTTPError:
+        #     raise
+        # except Exception as e:
+        #     raise web.HTTPError(500, u'Unknown error renaming file: %s %s' % (old_path, e))
 
     def info_string(self):
         return _("Serving notebooks from local directory: %s") % self.root_dir

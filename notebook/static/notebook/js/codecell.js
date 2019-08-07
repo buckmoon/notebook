@@ -358,8 +358,23 @@ define([
         this.set_input_prompt('*');
         this.element.addClass("running");
         var callbacks = this.get_callbacks();
-        
-        this.last_msg_id = this.kernel.execute(this.get_text(), callbacks, {silent: false, store_history: true,
+
+        // modified at 9/22
+        // console.log("miw_dataset_group_id :", miw_dataset_group_id)
+        // console.log("this.get_text() :", this.get_text()f (miw_dataset_group_id != select_dataset_flag && miw_dataset_group_id != null){
+        var text = "if not \"DatasetGroup\" in locals():\n"
+        text += " import os,sys\n";
+        text += " sys.path.append(os.getenv('ML_FILE_PATH', ''))\n";
+        text += " import miw_utils\n";
+        text += " miw_dataset_group = miw_utils.entities.raw_data_groups.DBRawDataGroups.read_dataset_group(";
+        text += miw_dataset_group_id;
+        text += ")\n";
+        text += " DatasetGroup = miw_dataset_group.read() \n";
+        text += " access_token = \'" + access_token + "\'\n";
+        text += this.get_text();
+        // console.log("text :", text)
+
+        this.last_msg_id = this.kernel.execute(text, callbacks, {silent: false, store_history: true,
             stop_on_error : stop_on_error});
         CodeCell.msg_cells[this.last_msg_id] = this;
         this.render();

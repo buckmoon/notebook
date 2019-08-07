@@ -251,6 +251,14 @@ class IPythonHandler(AuthenticatedHandler):
         return self.settings.get('default_url', '')
 
     @property
+    def miw_dict_json(self):
+        return self.settings.get('miw_dict_json', '')
+
+    @property
+    def ml_project_id(self):
+        return self.settings.get('ml_project_id', '')
+
+    @property
     def ws_url(self):
         return self.settings.get('websocket_url', '')
 

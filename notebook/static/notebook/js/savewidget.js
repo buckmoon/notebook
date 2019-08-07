@@ -30,9 +30,9 @@ define([
 
     SaveWidget.prototype.bind_events = function () {
         var that = this;
-        this.element.find('span.filename').click(function () {
-            that.rename_notebook({notebook: that.notebook});
-        });
+        // this.element.find('span.filename').click(function () {
+        //     that.rename_notebook({notebook: that.notebook});
+        // });
         this.events.on('notebook_loaded.Notebook', function () {
             that.update_notebook_name();
             that.update_document_title();

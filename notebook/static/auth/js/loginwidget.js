@@ -20,10 +20,15 @@ define([
 
     LoginWidget.prototype.bind_events = function () {
         var that = this;
+        var logout_params = "logout"
+        logout_params += "?ml_project_id="
+        logout_params += dirname
+        logout_params += "&move_type=ml_project"
         this.element.find("button#logout").click(function () {
             window.location = utils.url_path_join(
                 that.base_url,
-                "logout"
+                logout_params
+
             );
         });
         this.element.find("button#login").click(function () {
