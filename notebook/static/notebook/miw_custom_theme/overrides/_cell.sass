@@ -1,0 +1,48 @@
+#miw
+  .cell
+    margin-bottom: 12px
+    border: none
+    .out_prompt_overlay:hover
+      background-color: transparent
+      box-shadow: none
+    &.selected,
+    &.selected.jupyter-soft-selected
+      border: none
+      .input_prompt
+        background-color: rgba($COLOR_MAIN, 0.2)
+        color: $COLOR_WHITE
+    &.selected:before,
+    &.selected.jupyter-soft-selected:before
+      display: none
+
+  &.edit_mode .cell
+    &.selected,
+    &.selected.jupyter-soft-selected
+      .input_prompt
+        background-color: rgba($COLOR_MAIN, 0.7)
+        color: $COLOR_WHITE
+      .input_area
+        border: 1px solid $COLOR_MAIN
+    &.selected:before,
+    &.selected.jupyter-soft-selected:before
+      display: none
+
+  .text_cell_render
+    color: $COLOR_TEXT
+    padding: 0 15px
+
+  .input
+    margin-bottom: 6px
+
+  .input_area
+    border-radius: 0
+    background-color: rgba($COLOR_MAIN, 0.08)
+    border: 1px solid $COLOR_INPUT
+
+  .input_prompt
+    color: $COLOR_MAIN
+
+  .prompt
+    min-width: 60px
+  .prompt bdi
+    display: none

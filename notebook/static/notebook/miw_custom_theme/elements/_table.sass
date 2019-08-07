@@ -1,0 +1,123 @@
+.mw-m--table.normal
+  table
+    width: 100%
+  th
+    border-bottom: 1px solid $COLOR_GRAYLIGHT
+    padding: 10px 12px
+    color: $COLOR_TEXTSUB
+    text-align: left
+    font-weight: 400
+    font-size: 12px
+    letter-spacing: 0.07em
+    vertical-align: middle
+    &.center
+      text-align: center
+  td
+    border-bottom: 1px solid $COLOR_GRAYLIGHT
+    padding: 15px 12px
+    vertical-align: middle
+    line-height: 1.5
+    .sub
+      color: $COLOR_TEXTSUB
+      display: block
+    &.center
+      text-align: center
+    &.top
+      vertical-align: top
+  tr:last-child td,
+  tr:last-child th
+    border-bottom: none
+.mw-m--table.stripe
+  tr:nth-child(even)
+    background-color: $COLOR_GRAYCLEAR
+.mw-m--table.normal.mini
+  th
+    padding: 8px 12px
+  td
+    padding: 8px 12px
+
+.mw-m--table.normal.wide
+  th
+    padding: 12px 12px
+  td
+    padding: 12px 12px
+
+.mw-m--table.normal.fit
+  td:first-child,
+  th:first-child
+    padding-left: 0px
+  td:last-child,
+  th:last-child
+    padding-right: 0px
+
+.mw-m--table.inner
+  td:first-child,
+  th:first-child
+    padding-left: 20px
+  td:last-child,
+  th:last-child
+    padding-right: 20px
+
+.mw-m--table.simple
+  tr
+    border-bottom: 1px solid $COLOR_GRAY
+  th
+    padding: 8px 12px 7px 12px
+    color: $COLOR_TEXTSUB
+    text-align: left
+    vertical-align: middle
+    font-weight: 500
+  td
+    border-bottom: 1px solid $COLOR_GRAY
+    padding: 12px 12px 11px 12px
+    vertical-align: middle
+    line-height: 1.4
+
+.mw-m--table.vertical
+  tr
+    border-bottom: 1px solid $COLOR_GRAY
+  th
+    padding: 10px 12px 10px 0
+    color: $COLOR_TEXTSUB
+    text-align: left
+    vertical-align: middle
+    font-weight: 500
+    line-height: 1.2
+  td
+    border-bottom: 1px solid $COLOR_GRAY
+    padding: 10px 12px 10px 12px
+    vertical-align: middle
+    line-height: 1.2
+
+.mw-m--table
+  tr[data-href]
+    cursor: pointer
+    transition: $ANIMATION_FADE
+    &:hover
+      background-color: rgba($COLOR_MAIN, 0.1)
+  .mw-m--action .button
+    box-shadow: none
+    padding: 0 4px
+    opacity: 0.7
+    &:hover
+      opacity: 1
+  th.center,
+  td.center
+    text-align: center
+  th.right,
+  td.right
+    text-align: right
+
+.mw-m--tabel-category
+  display: inline-block
+  margin-right: 12px
+  font-size: 16px
+  font-weight: bold
+  &.node
+    color: $COLOR_MAIN
+  &.dataset
+    color: $COLOR_PURPLE
+
+.mw-m--tabel-title
+  font-weight: 500
+  color: $COLOR_TEXT

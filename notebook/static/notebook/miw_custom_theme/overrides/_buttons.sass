@@ -1,0 +1,31 @@
+#miw
+  .btn
+    border: 0
+    border-radius: 0
+    outline: 0
+
+  .btn-default
+    background-color: rgba($COLOR_WHITE, 0.2)
+    color: $COLOR_WHITE
+    box-shadow: 0px 0px 0px 1px rgba($COLOR_WHITE, 0.3) inset, $SHADOW_HARD
+    &:hover
+      background-color: rgba($COLOR_WHITE, 0.3)
+      color: $COLOR_WHITE
+    &:active,
+    &.active
+      background-color: rgba($COLOR_WHITE, 0.5)
+
+  .btn-primary
+    box-shadow: 0px 0px 0px 1px $COLOR_MAIN inset
+    background-color: rgba($COLOR_MAIN, 0.8)
+    color: $COLOR_WHITE
+    &:hover
+      background-color: rgba($COLOR_MAIN, 0.9)
+
+  .btn-danger
+    box-shadow: 0px 0px 0px 1px $COLOR_RED inset
+    background-color: rgba($COLOR_RED, 0.8)
+    color: $COLOR_WHITE
+    border: 0
+    &:hover
+      background-color: rgba($COLOR_RED, 0.9)

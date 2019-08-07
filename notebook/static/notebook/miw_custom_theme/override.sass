@@ -1,0 +1,20 @@
+@import "./base/*"
+@import "./functions/*"
+@import "./elements/*"
+@import "./components/*"
+@import "./overrides/*"
+
+a
+  color: $COLOR_MAIN
+
+//全体の背景色
+.notebook_app
+  background-color: $COLOR_BLACKBODY
+  color: $COLOR_TEXT
+
+.mw-m--nbook-body
+  height: 100%
+  display: flex
+  & > .body-main
+    flex: 1
+    overflow-y: auto
