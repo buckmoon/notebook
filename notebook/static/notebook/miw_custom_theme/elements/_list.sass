@@ -1,0 +1,39 @@
+.mw-m--lists
+  & > .list
+    display: flex
+    padding: 6px 0
+    align-items: center
+    & > div
+      margin-right: 12px
+    & > div:last-child
+      margin-right: 0
+    .list-content
+      flex: 1
+    & > .sub
+      color: $COLOR_TEXTSUB
+    @for $i from 1 through 20
+      .list-width-#{$i * 10}
+        width: #{10 * $i}px
+    .center
+      text-align: center
+  & > .list:first-child
+    padding-top: 0
+  & > .list:last-child
+    padding-bottom: 0
+  &.wide > .list
+    padding: 10px 0
+  &.wide-2x > .list
+    padding: 16px 0
+  &.border > .list
+    border-bottom: 1px solid $COLOR_GRAY
+  &.border > .list:last-child
+    border-bottom: 1px solid $COLOR_GRAY
+    padding-bottom: 6px
+  &.three.column
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    justify-content: space-between
+  &.three.column > .list
+    width: calc(33% - 15px)
+    min-width: calc(33% - 15px)

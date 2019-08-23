@@ -253,6 +253,14 @@ class IPythonHandler(AuthenticatedHandler):
         return self.settings.get('default_url', '')
 
     @property
+    def miw_dict_json(self):
+        return self.settings.get('miw_dict_json', '')
+
+    @property
+    def ml_project_id(self):
+        return self.settings.get('ml_project_id', '')
+
+    @property
     def ws_url(self):
         return self.settings.get('websocket_url', '')
 
@@ -330,7 +338,7 @@ class IPythonHandler(AuthenticatedHandler):
 
         if self.allow_credentials:
             self.set_header("Access-Control-Allow-Credentials", 'true')
-    
+
     def set_attachment_header(self, filename):
         """Set Content-Disposition: attachment header
 
@@ -413,16 +421,16 @@ class IPythonHandler(AuthenticatedHandler):
     #---------------------------------------------------------------
     # template rendering
     #---------------------------------------------------------------
-    
+
     def get_template(self, name):
         """Return the jinja template object for a given name"""
         return self.settings['jinja2_env'].get_template(name)
-    
+
     def render_template(self, name, **ns):
         ns.update(self.template_namespace)
         template = self.get_template(name)
         return template.render(**ns)
-    
+
     @property
     def template_namespace(self):
         return dict(
@@ -445,7 +453,7 @@ class IPythonHandler(AuthenticatedHandler):
                 self.request.headers.get('Accept-Language', ''))),
             **self.jinja_template_vars
         )
-    
+
     def get_json_body(self):
         """Return the body of the request as JSON data."""
         if not self.request.body:
@@ -473,12 +481,12 @@ class IPythonHandler(AuthenticatedHandler):
                 message = exception.log_message % exception.args
             except Exception:
                 pass
-            
+
             # construct the custom reason, if defined
             reason = getattr(exception, 'reason', '')
             if reason:
                 status_message = reason
-        
+
         # build template namespace
         ns = dict(
             status_code=status_code,
@@ -608,7 +616,7 @@ class AuthenticatedFileHandler(IPythonHandler, web.StaticFileHandler):
             self.set_attachment_header(name)
 
         return web.StaticFileHandler.get(self, path)
-    
+
     def get_content_type(self):
         path = self.absolute_path.strip('/')
         if '/' in path:
@@ -629,15 +637,15 @@ class AuthenticatedFileHandler(IPythonHandler, web.StaticFileHandler):
         # disable browser caching, rely on 304 replies for savings
         if "v" not in self.request.arguments:
             self.add_header("Cache-Control", "no-cache")
-    
+
     def compute_etag(self):
         return None
-    
+
     def validate_absolute_path(self, root, absolute_path):
         """Validate and return the absolute path.
-        
+
         Requires tornado 3.1
-        
+
         Adding to tornado's own handling, forbids the serving of hidden files.
         """
         abs_path = super(AuthenticatedFileHandler, self).validate_absolute_path(root, absolute_path)
@@ -650,12 +658,12 @@ class AuthenticatedFileHandler(IPythonHandler, web.StaticFileHandler):
 
 def json_errors(method):
     """Decorate methods with this to return GitHub style JSON errors.
-    
+
     This should be used on any JSON API on any handler method that can raise HTTPErrors.
-    
+
     This will grab the latest HTTPError exception using sys.exc_info
     and then:
-    
+
     1. Set the HTTP status code based on the HTTPError
     2. Create and return a JSON body with a message field describing
        the error in a human readable form.
@@ -681,31 +689,31 @@ HTTPError = web.HTTPError
 
 class FileFindHandler(IPythonHandler, web.StaticFileHandler):
     """subclass of StaticFileHandler for serving files from a search path"""
-    
+
     # cache search results, don't search for files more than once
     _static_paths = {}
-    
+
     def set_headers(self):
         super(FileFindHandler, self).set_headers()
         # disable browser caching, rely on 304 replies for savings
         if "v" not in self.request.arguments or \
                 any(self.request.path.startswith(path) for path in self.no_cache_paths):
             self.set_header("Cache-Control", "no-cache")
-    
+
     def initialize(self, path, default_filename=None, no_cache_paths=None):
         self.no_cache_paths = no_cache_paths or []
-        
+
         if isinstance(path, string_types):
             path = [path]
-        
+
         self.root = tuple(
             os.path.abspath(os.path.expanduser(p)) + os.sep for p in path
         )
         self.default_filename = default_filename
-    
+
     def compute_etag(self):
         return None
-    
+
     @classmethod
     def get_absolute_path(cls, roots, path):
         """locate a file to serve on our static file search path"""
@@ -717,22 +725,22 @@ class FileFindHandler(IPythonHandler, web.StaticFileHandler):
             except IOError:
                 # IOError means not found
                 return ''
-            
+
             cls._static_paths[path] = abspath
-            
+
 
             log().debug("Path %s served from %s"%(path, abspath))
             return abspath
-    
+
     def validate_absolute_path(self, root, absolute_path):
         """check if the file should be served (raises 404, 403, etc.)"""
         if absolute_path == '':
             raise web.HTTPError(404)
-        
+
         for root in self.root:
             if (absolute_path + os.sep).startswith(root):
                 break
-        
+
         return super(FileFindHandler, self).validate_absolute_path(root, absolute_path)
 
 
@@ -745,23 +753,23 @@ class APIVersionHandler(APIHandler):
 
 class TrailingSlashHandler(web.RequestHandler):
     """Simple redirect handler that strips trailing slashes
-    
+
     This should be the first, highest priority handler.
     """
-    
+
     def get(self):
         self.redirect(self.request.uri.rstrip('/'))
-    
+
     post = put = get
 
 
 class FilesRedirectHandler(IPythonHandler):
     """Handler for redirecting relative URLs to the /files/ handler"""
-    
+
     @staticmethod
     def redirect_to_files(self, path):
         """make redirect logic a reusable static method
-        
+
         so it can be called from other handlers.
         """
         cm = self.contents_manager
@@ -786,7 +794,7 @@ class FilesRedirectHandler(IPythonHandler):
             url = url_path_join(self.base_url, 'files', url_escape(path))
         self.log.debug("Redirecting %s to %s", self.request.path, url)
         self.redirect(url)
-    
+
     def get(self, path=''):
         return self.redirect_to_files(self, path)
 

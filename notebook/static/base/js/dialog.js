@@ -24,13 +24,13 @@ define(['jquery',
      *    - notebook : notebook instance
      *    - keyboard_manager: keyboard manager instance.
      *
-     *  Unlike bootstrap modals, the backdrop options is set by default 
+     *  Unlike bootstrap modals, the backdrop options is set by default
      *  to 'static'.
      *
-     *  The rest of the options are passed as is to bootstrap modals. 
+     *  The rest of the options are passed as is to bootstrap modals.
      *
      *  btn_options: dict with the following property:
-     *  
+     *
      *    - click : callback to trigger on click
      *    - class : css classes to add to button.
      *
@@ -76,11 +76,11 @@ define(['jquery',
                     options.body || $("<p/>")
                 )
         );
-        
+
         var footer = $("<div/>").addClass("modal-footer");
-        
+
         var default_button;
-        
+
         for (var label in options.buttons) {
             var btn_opts = options.buttons[label];
             var button = $("<button/>")
@@ -114,7 +114,7 @@ define(['jquery',
                 }
             }, 0);
         });
-        
+
         // destroy modal on hide, unless explicitly asked not to
         if (options.destroy === undefined || options.destroy) {
             modal.on("hidden.bs.modal", function () {
@@ -131,15 +131,15 @@ define(['jquery',
                 options.keyboard_manager.command_mode();
             }
         });
-        
+
         if (options.keyboard_manager) {
             options.keyboard_manager.disable();
         }
-        
+
         if(options.backdrop === undefined){
           options.backdrop = 'static';
         }
-        
+
         return modal.modal(options);
     };
 
@@ -155,85 +155,85 @@ define(['jquery',
     };
 
     var edit_metadata = function (options) {
-        options.name = options.name || "Cell";
-        var error_div = $('<div/>').css('color', 'red');
-        var message_cell = 
-            i18n.msg._("Manually edit the JSON below to manipulate the metadata for this cell.");
-        var message_notebook = 
-            i18n.msg._("Manually edit the JSON below to manipulate the metadata for this notebook.");
-        var message_end = 
-            i18n.msg._(" We recommend putting custom metadata attributes in an appropriately named substructure," +
-            " so they don't conflict with those of others.");
-
-        var message;
-        if (options.name === 'Notebook') {
-        	message = message_notebook + message_end;
-        } else {
-        	message = message_cell + message_end;
-        }
-        var textarea = $('<textarea/>')
-            .attr('rows', '13')
-            .attr('cols', '80')
-            .attr('name', 'metadata')
-            .text(JSON.stringify(options.md || {}, null, 2));
-        
-        var dialogform = $('<div/>').attr('title', i18n.msg._('Edit the metadata'))
-            .append(
-                $('<form/>').append(
-                    $('<fieldset/>').append(
-                        $('<label/>')
-                        .attr('for','metadata')
-                        .text(message)
-                        )
-                        .append(error_div)
-                        .append($('<br/>'))
-                        .append(textarea)
-                    )
-            );
-        var editor = CodeMirror.fromTextArea(textarea[0], {
-            lineNumbers: true,
-            matchBrackets: true,
-            indentUnit: 2,
-            autoIndent: true,
-            mode: 'application/json',
-        });
-        var title_msg;
-        if (options.name === "Notebook") {
-        	title_msg = i18n.msg._("Edit Notebook Metadata");
-        } else {
-        	title_msg = i18n.msg._("Edit Cell Metadata");
-        }
-        // This statement is used simply so that message extraction
-        // will pick up the strings.
-        var button_labels = [ i18n.msg._("Cancel"), i18n.msg._("Edit"), i18n.msg._("OK"), i18n.msg._("Apply")];
-        var modal_obj = modal({
-            title: title_msg,
-            body: dialogform,
-            default_button: "Cancel",
-            buttons: {
-                Cancel: {},
-                Edit: { class : "btn-primary",
-                    click: function() {
-                        /**
-                         * validate json and set it
-                         */
-                        var new_md;
-                        try {
-                            new_md = JSON.parse(editor.getValue());
-                        } catch(e) {
-                            console.log(e);
-                            error_div.text(i18n.msg._('WARNING: Could not save invalid JSON.'));
-                            return false;
-                        }
-                        options.callback(new_md);
-                    }
-                }
-            },
-            notebook: options.notebook,
-            keyboard_manager: options.keyboard_manager,
-        });
-
-        modal_obj.on('shown.bs.modal', function(){ editor.refresh(); });
+        // options.name = options.name || "Cell";
+        // var error_div = $('<div/>').css('color', 'red');
+        // var message_cell =
+        //     i18n.msg._("Manually edit the JSON below to manipulate the metadata for this cell.");
+        // var message_notebook =
+        //     i18n.msg._("Manually edit the JSON below to manipulate the metadata for this notebook.");
+        // var message_end =
+        //     i18n.msg._(" We recommend putting custom metadata attributes in an appropriately named substructure," +
+        //     " so they don't conflict with those of others.");
+        //
+        // var message;
+        // if (options.name === 'Notebook') {
+        // 	message = message_notebook + message_end;
+        // } else {
+        // 	message = message_cell + message_end;
+        // }
+        // var textarea = $('<textarea/>')
+        //     .attr('rows', '13')
+        //     .attr('cols', '80')
+        //     .attr('name', 'metadata')
+        //     .text(JSON.stringify(options.md || {}, null, 2));
+        //
+        // var dialogform = $('<div/>').attr('title', i18n.msg._('Edit the metadata'))
+        //     .append(
+        //         $('<form/>').append(
+        //             $('<fieldset/>').append(
+        //                 $('<label/>')
+        //                 .attr('for','metadata')
+        //                 .text(message)
+        //                 )
+        //                 .append(error_div)
+        //                 .append($('<br/>'))
+        //                 .append(textarea)
+        //             )
+        //     );
+        // var editor = CodeMirror.fromTextArea(textarea[0], {
+        //     lineNumbers: true,
+        //     matchBrackets: true,
+        //     indentUnit: 2,
+        //     autoIndent: true,
+        //     mode: 'application/json',
+        // });
+        // var title_msg;
+        // if (options.name === "Notebook") {
+        // 	title_msg = i18n.msg._("Edit Notebook Metadata");
+        // } else {
+        // 	title_msg = i18n.msg._("Edit Cell Metadata");
+        // }
+        // // This statement is used simply so that message extraction
+        // // will pick up the strings.
+        // var button_labels = [ i18n.msg._("Cancel"), i18n.msg._("Edit"), i18n.msg._("OK"), i18n.msg._("Apply")];
+        // var modal_obj = modal({
+        //     title: title_msg,
+        //     body: dialogform,
+        //     default_button: "Cancel",
+        //     buttons: {
+        //         Cancel: {},
+        //         Edit: { class : "btn-primary",
+        //             click: function() {
+        //                 /**
+        //                  * validate json and set it
+        //                  */
+        //                 var new_md;
+        //                 try {
+        //                     new_md = JSON.parse(editor.getValue());
+        //                 } catch(e) {
+        //                     console.log(e);
+        //                     error_div.text(i18n.msg._('WARNING: Could not save invalid JSON.'));
+        //                     return false;
+        //                 }
+        //                 options.callback(new_md);
+        //             }
+        //         }
+        //     },
+        //     notebook: options.notebook,
+        //     keyboard_manager: options.keyboard_manager,
+        // });
+        //
+        // modal_obj.on('shown.bs.modal', function(){ editor.refresh(); });
     };
 
     var edit_attachments = function (options) {
@@ -413,7 +413,7 @@ define(['jquery',
         });
     };
 
-    
+
     var dialog = {
         modal : modal,
         kernel_modal : kernel_modal,

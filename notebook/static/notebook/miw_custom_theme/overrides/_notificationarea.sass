@@ -1,0 +1,27 @@
+#miw
+  #kernel_indicator
+    float: none
+    color: $COLOR_TEXT
+    margin: 0 24px 0 0
+    border: 0
+
+  #kernel_indicator_icon
+    &:before
+      font-size: 9px
+      content: "\f111"
+      position: relative
+      top: -1px
+    &.kernel_idle_icon:before
+      color: $COLOR_GREEN
+    &.kernel_busy_icon
+      color: $COLOR_YELLOW
+    &.kernel_dead_icon
+      color: $COLOR_RED
+    &.kernel_disconnected_icon
+      color: $COLOR_GRAY
+
+  .notification_widget
+    padding: 0
+    background-color: transparent
+    padding-right: 4px
+    color: $COLOR_TEXT

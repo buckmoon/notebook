@@ -79,66 +79,66 @@ class NbconvertFileHandler(IPythonHandler):
 
     @web.authenticated
     def get(self, format, path):
-
-        exporter = get_exporter(format, config=self.config, log=self.log)
-
-        path = path.strip('/')
-        # If the notebook relates to a real file (default contents manager),
-        # give its path to nbconvert.
-        if hasattr(self.contents_manager, '_get_os_path'):
-            os_path = self.contents_manager._get_os_path(path)
-            ext_resources_dir, basename = os.path.split(os_path)
-        else:
-            ext_resources_dir = None
-
-        model = self.contents_manager.get(path=path)
-        name = model['name']
-        if model['type'] != 'notebook':
-            # not a notebook, redirect to files
-            return FilesRedirectHandler.redirect_to_files(self, path)
-
-        nb = model['content']
-
-        self.set_header('Last-Modified', model['last_modified'])
-
-        # create resources dictionary
-        mod_date = model['last_modified'].strftime(text.date_format)
-        nb_title = os.path.splitext(name)[0]
-
-        resource_dict = {
-            "metadata": {
-                "name": nb_title,
-                "modified_date": mod_date
-            },
-            "config_dir": self.application.settings['config_dir']
-        }
-
-        if ext_resources_dir:
-            resource_dict['metadata']['path'] = ext_resources_dir
-
-        try:
-            output, resources = exporter.from_notebook_node(
-                nb,
-                resources=resource_dict
-            )
-        except Exception as e:
-            self.log.exception("nbconvert failed: %s", e)
-            raise web.HTTPError(500, "nbconvert failed: %s" % e)
-
-        if respond_zip(self, name, output, resources):
-            return
+        raise web.HTTPError(409, u'You can not convert: %s' % path)
+        # exporter = get_exporter(format, config=self.config, log=self.log)
+        #
+        # path = path.strip('/')
+        # # If the notebook relates to a real file (default contents manager),
+        # # give its path to nbconvert.
+        # if hasattr(self.contents_manager, '_get_os_path'):
+        #     os_path = self.contents_manager._get_os_path(path)
+        #     ext_resources_dir, basename = os.path.split(os_path)
+        # else:
+        #     ext_resources_dir = None
+        #
+        # model = self.contents_manager.get(path=path)
+        # name = model['name']
+        # if model['type'] != 'notebook':
+        #     # not a notebook, redirect to files
+        #     return FilesRedirectHandler.redirect_to_files(self, path)
+        #
+        # nb = model['content']
+        #
+        # self.set_header('Last-Modified', model['last_modified'])
+        #
+        # # create resources dictionary
+        # mod_date = model['last_modified'].strftime(text.date_format)
+        # nb_title = os.path.splitext(name)[0]
+        #
+        # resource_dict = {
+        #     "metadata": {
+        #         "name": nb_title,
+        #         "modified_date": mod_date
+        #     },
+        #     "config_dir": self.application.settings['config_dir']
+        # }
+        #
+        # if ext_resources_dir:
+        #     resource_dict['metadata']['path'] = ext_resources_dir
+        #
+        # try:
+        #     output, resources = exporter.from_notebook_node(
+        #         nb,
+        #         resources=resource_dict
+        #     )
+        # except Exception as e:
+        #     self.log.exception("nbconvert failed: %s", e)
+        #     raise web.HTTPError(500, "nbconvert failed: %s" % e)
+        #
+        # if respond_zip(self, name, output, resources):
+        #     return
 
         # Force download if requested
-        if self.get_argument('download', 'false').lower() == 'true':
-            filename = os.path.splitext(name)[0] + resources['output_extension']
-            self.set_attachment_header(filename)
-
-        # MIME type
-        if exporter.output_mimetype:
-            self.set_header('Content-Type',
-                            '%s; charset=utf-8' % exporter.output_mimetype)
-
-        self.finish(output)
+        # if self.get_argument('download', 'false').lower() == 'true':
+        #     filename = os.path.splitext(name)[0] + resources['output_extension']
+        #     self.set_attachment_header(filename)
+        #
+        # # MIME type
+        # if exporter.output_mimetype:
+        #     self.set_header('Content-Type',
+        #                     '%s; charset=utf-8' % exporter.output_mimetype)
+        #
+        # self.finish(output)
 
 class NbconvertPostHandler(IPythonHandler):
     SUPPORTED_METHODS = ('POST',)

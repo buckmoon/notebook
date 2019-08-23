@@ -39,7 +39,7 @@ define([
     cmip
     ) {
     "use strict";
-    
+
     var Cell = cell.Cell;
 
     /* local util for codemirror */
@@ -88,9 +88,9 @@ define([
          *      it will be null and set_kernel has to be called later.
          *  options: dictionary
          *      Dictionary of keyword arguments.
-         *          events: $(Events) instance 
+         *          events: $(Events) instance
          *          config: dictionary
-         *          keyboard_manager: KeyboardManager instance 
+         *          keyboard_manager: KeyboardManager instance
          *          notebook: Notebook instance
          *          tooltip: Tooltip instance
          */
@@ -113,8 +113,8 @@ define([
         this.completer = null;
 
         Cell.apply(this,[{
-            config: options.config, 
-            keyboard_manager: options.keyboard_manager, 
+            config: options.config,
+            keyboard_manager: options.keyboard_manager,
             events: this.events}]);
 
         // Attributes we want to override in this subclass.
@@ -149,7 +149,7 @@ define([
     CodeCell.msg_cells = {};
 
     CodeCell.prototype = Object.create(Cell.prototype);
-    
+
     /** @method create_element */
     CodeCell.prototype.create_element = function () {
         Cell.prototype.create_element.apply(this, arguments);
@@ -163,7 +163,7 @@ define([
         var prompt = $('<div/>').addClass('prompt input_prompt');
         var inner_cell = $('<div/>').addClass('inner_cell');
         this.celltoolbar = new celltoolbar.CellToolbar({
-            cell: this, 
+            cell: this,
             notebook: this.notebook});
         inner_cell.append(this.celltoolbar.element);
         var input_area = $('<div/>').addClass('input_area');
@@ -264,7 +264,7 @@ define([
                     // Don't show tooltip if the part of the line before the cursor
                     // is empty.  In this case, let CodeMirror handle indentation.
                     return false;
-                } 
+                }
                 this.tooltip.request(that);
                 event.codemirrorIgnore = true;
                 event.preventDefault();
@@ -288,8 +288,8 @@ define([
                 this.completer.startCompletion();
                 return true;
             }
-        } 
-        
+        }
+
         // keyboard event wasn't one of those unique to code cells, let's see
         // if it's one of the generic ones (i.e. check edit mode shortcuts)
         return Cell.prototype.handle_codemirror_keyevent.apply(this, [editor, event]);
@@ -312,7 +312,7 @@ define([
         }
 
         if (stop_on_error === undefined) {
-            if (this.metadata !== undefined && 
+            if (this.metadata !== undefined &&
                     this.metadata.tags !== undefined) {
                 if (this.metadata.tags.indexOf('raises-exception') !== -1) {
                     stop_on_error = false;
@@ -339,8 +339,27 @@ define([
         this.set_input_prompt('*');
         this.element.addClass("running");
         var callbacks = this.get_callbacks();
-        
-        this.last_msg_id = this.kernel.execute(this.get_text(), callbacks, {silent: false, store_history: true,
+
+        // modified at 9/22
+        // console.log("miw_dataset_group_id :", miw_dataset_group_id)
+        // console.log("this.get_text() :", this.get_text()f (miw_dataset_group_id != select_dataset_flag && miw_dataset_group_id != null){
+        if (miw_dataset_group_id != select_dataset_flag && miw_dataset_group_id != null){
+            var text = "import os,sys\n";
+            text += "sys.path.append(os.getenv('ML_FILE_PATH', ''))\n";
+            text += "import miw_utils\n";
+            text += "miw_dataset_group = miw_utils.entities.raw_data_groups.DBRawDataGroups.read_dataset_group(";
+            text += miw_dataset_group_id;
+            text += ")\n";
+            text += "DatasetGroup = miw_dataset_group.read() \n";
+            text += "access_token = \'" + access_token + "\'\n";
+            text += this.get_text();
+          select_dataset_flag = miw_dataset_group_id;
+        }else{
+          var text = this.get_text();
+        }
+        // console.log("text :", text)
+
+        this.last_msg_id = this.kernel.execute(text, callbacks, {silent: false, store_history: true,
             stop_on_error : stop_on_error});
         CodeCell.msg_cells[this.last_msg_id] = this;
         this.render();
@@ -354,7 +373,8 @@ define([
         }
         this.events.on('finished_iopub.Kernel', handleFinished);
     };
-    
+
+
     /**
      * Construct the default callbacks for
      * @method get_callbacks
@@ -371,19 +391,19 @@ define([
                 }
             },
             iopub : {
-                output : function() { 
+                output : function() {
                     that.events.trigger('set_dirty.Notebook', {value: true});
                     that.output_area.handle_output.apply(that.output_area, arguments);
-                }, 
-                clear_output : function() { 
+                },
+                clear_output : function() {
                     that.events.trigger('set_dirty.Notebook', {value: true});
                     that.output_area.handle_clear_output.apply(that.output_area, arguments);
-                }, 
+                },
             },
             input : $.proxy(this._handle_input_request, this),
         };
     };
-    
+
     CodeCell.prototype._open_with_pager = function (payload) {
         this.events.trigger('open_with_text.Pager', payload);
     };
@@ -437,7 +457,7 @@ define([
         // Always execute, even if we are already in the rendered state
         return cont;
     };
-    
+
     CodeCell.prototype.select_all = function () {
         var start = {line: 0, ch: 0};
         var nlines = this.code_mirror.lineCount();

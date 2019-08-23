@@ -1,0 +1,317 @@
+//公開・非公開の表示
+.mw-m--status
+  padding-left: 14px
+  position: relative
+  display: inline-block
+  &:before
+    content: ''
+    display: block
+    height: 8px
+    width: 8px
+    border-radius: 8px
+    top: calc(50% - 4px)
+    left: 0
+    position: absolute
+    background-color: $COLOR_GRAY
+  &.public:before
+    background-color: rgba($COLOR_GREEN, 0.7)
+    box-shadow: 0 0 7px rgba($COLOR_GREEN, 0.65)
+  & > .blackbox
+    font-size: 12px
+    color: $COLOR_TEXTSUB
+    padding-left: 5px
+    position: relative
+    top: -1px
+  &.icon
+    height: 1em
+    position: relative
+    top: 3px
+    margin: 0 4px
+
+// 通常のラベル
+.mw-m--label
+  padding: 0.4em 0.9em
+  display: inline-block
+  line-height: 1
+  vertical-align: baseline
+  font-weight: 500
+  color: $COLOR_TEXT
+  background-color: rgba($COLOR_WHITE, 0.1)
+  &.flex
+    display: flex
+    align-items: center
+  &.primary
+    background-color: rgba($COLOR_MAIN, 0.5)
+  &.secondary
+    background-color: rgba($COLOR_PURPLE, 0.5)
+  &.positive
+    background-color: rgba($COLOR_GREEN , 0.5)
+  &.negative
+    background-color: rgba($COLOR_RED, 0.5)
+  &.warning
+    background-color: rgba($COLOR_YELLOW, 0.5)
+    color: $COLOR_WHITE
+  &.basic
+    background-color: transparent
+    box-shadow: inset 0 0 0 1px $COLOR_GRAY
+
+// 画像付きのラベル
+// プロジェクト画像 + プロジェクト名
+// ユーザー画像 + ユーザー名
+.mw-m--label-image
+  display: flex
+  align-items: center
+  position: relative
+  &.inline
+    display: inline-flex
+  & > .icon
+    display: block
+    height: 24px
+    width: 24px
+    background-color: $COLOR_GRAY
+    background-size: cover
+    background-position: center
+    text-align: center
+    color: $COLOR_WHITE
+    line-height: 21px
+    box-sizing: border-box
+    &.warning
+      background-color: $COLOR_YELLOW
+      color: $COLOR_BLACK
+    &.primary
+      background-color: $COLOR_MAIN
+    &.secondary
+      background-color: $COLOR_PURPLE
+    &.project
+      color: $COLOR_MAIN
+      background-color: rgba($COLOR_MAIN, 0.15)
+    &.node
+      color: $COLOR_MAIN
+      background-color: rgba($COLOR_MAIN, 0.15)
+    &.mlproject
+      color: $COLOR_GREEN
+      background-color: rgba($COLOR_GREEN, 0.15)
+    &.model
+      color: $COLOR_GREEN
+      background-color: rgba($COLOR_GREEN, 0.15)
+    &.dataset
+      color: $COLOR_PURPLE
+      background-color: rgba($COLOR_PURPLE, 0.15)
+    &.datasetgroup
+      color: $COLOR_PURPLE
+      background-color: rgba($COLOR_PURPLE, 0.15)
+    &.text
+      color: $COLOR_TEXT
+      overflow: hidden
+  & > .name
+    padding-left: 12px
+    font-weight: 600
+    line-height: 1.4
+    flex: 1
+  & > .name.basic
+    font-weight: 400
+  & > .name.black
+    color: $COLOR_TEXT
+  & > .name.warning
+    color: $COLOR_YELLOW
+  & > .name.primary
+    color: $COLOR_MAIN
+  & > .name.secondary
+    color: $COLOR_PURPLE
+  & > .name.ellipsis
+    text-overflow: ellipsis
+    white-space: nowrap
+    overflow: hidden
+    min-width: 0
+  & > .name .role
+    font-weight: 400
+    color: $COLOR_TEXTSUB
+    padding-left: 8px
+  & > .name > .sub
+    font-size: 12px
+    margin-top: 4px
+    font-weight: normal
+  & > .name > .sub.gray
+    color: $COLOR_TEXTSUB
+  & > .name > .sub.block,
+  & > .name > .second.block
+    display: block
+  & > .name > .second
+    font-weight: normal
+    padding-left: 4px
+    .icon
+      color:  $COLOR_TEXTSUB
+  & > .layer
+    position: absolute
+  &.mini
+    & > .icon
+      height: 18px
+      width: 18px
+    & > .name
+      height: 18px
+      line-height: 18px
+      padding-left: 12px
+  &.large
+    & > .icon
+      height: 36px
+      width: 36px
+      line-height: 36px
+      font-size: 18px
+    & > .name
+      padding-left: 16px
+  &.big
+    & > .icon
+      height: 44px
+      width: 44px
+      line-height: 38px
+      font-size: 23px
+    & > .name
+      padding-left: 16px
+      font-size: 15px
+    & > .name > .sub
+      font-size: 13px
+      margin: 0
+  &.huge
+    & > .name
+      margin-top: -4px
+      font-size: 27px
+      padding-left: 26px
+      font-weight: 400
+    & > .icon
+      height: 56px
+      width: 56px
+      line-height: 49px
+      font-size: 29px
+    & > .name > .sub
+      font-size: 14px
+      margin: 0
+    & > .layer
+      left: 41px
+      top: 41px
+      border: 2px solid $COLOR_BLACKBODY
+      background-color: $COLOR_BLACK
+  &[href]:hover
+    opacity: 0.8
+
+
+//アイコン付きのラベル
+.mw-m--label-icon
+  position: relative
+  display: inline-flex
+  align-items: center
+  & > .icon
+    vertical-align: top
+    text-align: center
+    color: $COLOR_TEXT
+    & > i
+      position: relative
+      top: -2px
+    &.primary
+      color: $COLOR_MAIN
+    &.positive
+      color: $COLOR_GREEN
+    &.secondary
+      color: $COLOR_PURPLE
+    &.sub
+      color: $COLOR_TEXTSUB
+    &.project
+      color: $COLOR_MAIN
+    &.node
+      color: $COLOR_MAIN
+    &.mlproject
+      color: $COLOR_GREEN
+    &.model
+      color: $COLOR_GREEN
+    &.dataset
+      color: $COLOR_PURPLE
+    &.datasetgroup
+      color: $COLOR_PURPLE
+    &.text
+      font-size: 90%
+      color: $COLOR_TEXTSUB
+  & > .name
+    padding-left: 8px
+    font-weight: 500
+  & > .name.basic
+    font-weight: 400
+  & > .name.black
+    color: $COLOR_TEXT
+  & > .name.ellipsis
+    text-overflow: ellipsis
+    white-space: nowrap
+    overflow: hidden
+    height: 1.2em
+  & > .name .role
+    font-weight: 400
+    color: $COLOR_TEXTSUB
+    padding-left: 8px
+  & > .name .sub
+    color: $COLOR_TEXTSUB
+    padding-top: 6px
+  &[href]:hover .name
+    text-decoration: underline
+  &.node > .icon
+    color: $COLOR_MAIN
+  &.dataset > .icon
+    color: $COLOR_PURPLE
+  &.model > .icon
+    color: $COLOR_GREEN
+  & > .text
+    padding-left: 8px
+    .subtext
+      margin-top: 4px
+      color: $COLOR_TEXTSUB
+      font-size: 12px
+  &.large
+    & > .icon
+      font-size: 26px
+    & > .name
+      font-size: 16px
+      padding-left: 12px
+    & > .name > .sub
+      font-size: 13px
+      margin-top: -1px
+  &.big > .icon
+    font-size: 32px
+  &.big > .text
+    font-size: 17px
+    padding-left: 12px
+  &.big > .text > .subtext
+    font-size: 13px
+//プロジェクトアイコン
+//高さや横幅はないので別途指定が必要
+.mw-m--projecticon
+  background-color: $COLOR_GRAYLIGHT
+  background-image: asset-url('../images/project-default.png')
+  background-position: center
+  background-size: cover
+  display: block
+  &.default
+    width: 35px
+    height: 35px
+  &.small
+    width: 24px
+    height: 24px
+
+// タグ
+.mw-m--keyword
+  line-height: 1em
+  display: inline-block
+  padding: 4px 6px
+  font-size: 13px
+  background-color: rgba($COLOR_MAIN,0.2)
+  margin: 4px 4px 4px 0
+  color: $COLOR_TEXT
+  box-shadow: $SHADOW_NORMAL
+  &:hover
+    cursor: pointer
+    background-color: rgba($COLOR_MAIN,0.6)
+    color: $COLOR_TEXT
+  &.positive
+    background-color: rgba($COLOR_GREEN,0.3)
+    color: $COLOR_WHITE
+  &.positive:hover
+    background-color: rgba($COLOR_GREEN,0.6)
+  & > .keyword-action
+    display: inline
+    padding-left: 4px

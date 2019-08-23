@@ -1,0 +1,30 @@
+#miw
+  .output
+    margin-bottom: 6px
+  .output_area
+    pre
+      color: $COLOR_TEXT
+      background-color: transparent
+
+  .output_collapsed
+    background-color: rgba($COLOR_MAIN, 0.25)
+    border: 1px solid $COLOR_INPUT
+    text-align: center
+    color: $COLOR_TEXT
+
+  .output_scroll
+    box-shadow: none
+    .output_prompt
+      border-right: 2px solid $COLOR_INPUT
+
+  .output_subarea
+    padding: 12px 8px
+    color: $COLOR_TEXT
+    background-color: $COLOR_BLACK
+    border: 1px solid $COLOR_INPUT
+    max-width: calc(100% - 60px)
+    &.output_png
+      background-color: transparent
+      border: 0
+      img
+        background-color: #fff

@@ -1,0 +1,169 @@
+.mw-m--form
+  &.textarea
+    border: 1px solid $COLOR_GRAY
+    background-color: transparent
+    border-radius: 0
+    color: $COLOR_TEXT
+    padding: 0.78571429em 1em
+    outline: none
+    line-height: 1.2857
+    resize: vertical
+    height: 6.5em
+  &.text
+    border: 1px solid $COLOR_GRAY
+    background-color: transparent
+    border-radius: 0
+    color: $COLOR_TEXT
+    max-width: 100%
+    outline: none
+    flex: 1 0 auto
+    box-shadow: none
+    padding: 0.78571429em 1em
+    &:focus
+      border-color: $COLOR_MAIN
+  &.fluid
+    width: 100%
+
+  @for $i from 1 through 10
+    &.width-#{$i}x
+      width: #{40 * $i}px !important
+
+.mw-m--form-wrap
+  position: relative
+  & > .icon
+    position: absolute
+    right: 0.78571429em
+    top: 1em
+  &.flex
+    display: flex
+
+.mw-m--form-dummy
+  border: 1px solid $COLOR_GRAY
+  padding: 0.78571429em 1em
+  display: inline-block
+
+.field_with_errors
+  width: 100%
+  .mw-m--form
+    &.text,
+    &.textarea
+      border: 1px solid $COLOR_RED
+
+.mw-m--fields
+  display: flex
+
+.mw-m--field
+  margin-bottom: 28px
+  &.two
+    width: 6.25% * 2
+  &.four
+    width: 6.25% * 4
+  &.six
+    width: 6.25% * 6
+  &.eight
+    width: 6.25% * 8
+  &.ten
+    width: 6.25% * 10
+  &.twelve
+    width: 6.25% * 12
+  &.fourteen
+    width: 6.25% * 14
+  & > label
+    margin-bottom: 12px
+    display: block
+    font-weight: 500
+  &.required > label:after
+    content: '*'
+    display: inline-block
+    vertical-align: top
+    margin: -.2em 0 0 .2em
+    color: #db2828
+  &.no
+    margin-bottom: 0
+  &.short
+    margin-bottom: 10px
+  &.short.two
+    width: 7% * 2
+  &.short.three
+    width: 7%  * 3
+  &.short.four
+    width: 7% * 4
+  &.short.five
+    width: 7% * 5
+  &.short.six
+    width: 7% * 6
+  &.short.eight
+    width: 7% * 8
+  &.short.nine
+    width: 7% * 9
+  &.short.ten
+    width: 7% * 10
+  &.short.twelve
+    width: 7% * 12
+  &.short.fourteen
+    width: 7% * 14
+  &.horiontal
+    display: flex
+    align-items: top
+    & > label
+      width: 100px
+      padding-right: 12px
+      margin: 9px 0 0 0
+      text-align: right
+    & > .form
+      flex: 1
+
+
+
+.mw-m--form-ex
+  margin-top: 8px
+  line-height: 1.6
+  color: $COLOR_TEXTSUB
+  &.positive
+    color: $COLOR_GREEN
+  &.negative
+    color: $COLOR_RED
+
+.mw-m--form-error
+  margin-top: 4px
+  padding: 6px 8px
+  line-height: 1.5
+  color: $COLOR_WHITE
+  background-color: rgba(219, 40, 40, 0.6)
+  border-left: 3px solid #db2828
+  display: none
+
+//ファイルのアップロードボタンのカスタマイズ
+.mw-m--fileupload
+  padding: 7px
+  & > input
+    display: none
+
+//パスワードバリデート
+.mw-password-strength
+  margin-top: 8px
+  & > .level
+    position: relative
+  & > .level .wrap
+    background-color: $COLOR_GRAY
+    height: 3px
+    position: relative
+  & > .level .bar
+    height: 3px
+  & > .level .sep
+    position: absolute
+    height: 3px
+    width: 2px
+    top: 0
+    background-color: $COLOR_BLACKBODY
+    z-index: 10
+    &.sep1
+      left: 25%
+    &.sep2
+      left: 50%
+    &.sep3
+      left: 75%
+  & > .message
+    font-size: 12px
+    margin-top: 8px
+    line-height: 1.4

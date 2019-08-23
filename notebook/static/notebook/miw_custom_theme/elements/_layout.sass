@@ -1,0 +1,135 @@
+.mw-m--content
+  padding: 30px
+  border-radius: 1px
+  position: relative
+  &.gray,
+  &.gray:after
+    background-color: rgba($COLOR_MAIN, 0.08)
+  &.lightgray,
+  &.lightgray:after
+    background-color: rgba($COLOR_MAIN, 0.02)
+  &.primary,
+  &.primary:after
+    background-color: rgba($COLOR_MAIN, 0.5)
+  &.positive,
+  &.positive:after
+    background-color: rgba($COLOR_GREEN, 0.5)
+  &.negative,
+  &.negative:after
+    background-color: rgba($COLOR_RED, 0.6)
+  &.warning,
+  &.warning:after
+    background-color: rgba($COLOR_YELLOW, 0.4)
+  &.secondary,
+  &.secondary:after
+    background-color: rgba($COLOR_PURPLE, 0.4)
+  &.black,
+  &.black:after
+    background-color: $COLOR_BLACK
+  &.border
+    border: 1px solid $COLOR_GRAYLIGHT
+  &.border-input
+    border: 1px solid $COLOR_INPUT
+  &.border-negative
+    border: 1px solid $COLOR_RED
+  &.fullheight
+    height: 100%
+  &.top
+    margin-top: 20px
+  &.bottom
+    margin-bottom: 20px
+  &.bottom-2x
+    margin-bottom: 40px
+  &.mini
+    padding: 20px
+  &.tiny
+    padding: 8px
+  &.nospace
+    padding: 0
+  &.important
+    border-top: 3px solid $COLOR_MAIN
+  &.important.positive
+    border-top: 3px solid $COLOR_GREEN
+  &.shadow
+    box-shadow: $SHADOW_HARD
+  &.header
+    padding: 0 0 20px 0
+    border-bottom: 1px solid $COLOR_GRAY
+    margin-bottom: 24px
+  &.header.nav
+    padding-bottom: 0
+  &.tips
+    border-left: 3px solid $COLOR_GRAY
+    &.primary-border-only
+      border-color: $COLOR_MAIN
+    &.secondary-border-only
+      border-color: $COLOR_PURPLE
+    &.positive
+      border-color: $COLOR_GREEN
+    &.positive-border-only
+      border-color: $COLOR_GREEN
+    &.negative
+      border-color: $COLOR_RED
+    &.warning
+      border-color: $COLOR_YELLOW
+  &.blank
+    padding: 150px 40px
+  & > .content-title
+    font-size: 17px
+    margin-bottom: 28px
+    font-weight: 500
+  & > .content-title .sub
+    padding-left: 8px
+    font-size: 13px
+    color: $COLOR_TEXTSUB
+    font-weight: 400
+  & > .content-action + .content-title
+    padding-right: 100px
+  & > .content-action
+    position: absolute
+    top: 30px
+    right: 30px
+    &.flex
+      display: flex
+      align-items: center
+  & > .content-footer
+    border-top: 1px solid $COLOR_GRAYLIGHT
+    margin: 20px -20px -4px -20px
+    padding: 16px 20px 0 20px
+
+  &.mini > .content-title
+    margin-bottom: 20px
+  &.mini > .content-action
+    position: absolute
+    top: 20px
+    right: 20px
+  &.nospace > .content-title
+    margin-bottom: 12px
+  &.nospace > .content-action
+    top: 0
+    right: 0
+  &.stacked
+    &:after
+      content: ''
+      position: absolute
+      width: 98%
+      margin: 0 1%
+      height: 6px
+      bottom: -7px
+      left: 0
+      opacity: 0.7
+
+.mw-m--flex
+  display: flex
+  align-items: center
+
+.mw-m--column
+  display: flex
+  justify-content: space-between
+  & > .main
+    flex: 1
+  & > .sub
+    width: 30%
+    max-width: 380px
+    min-width: 240px
+    margin-left: 32px

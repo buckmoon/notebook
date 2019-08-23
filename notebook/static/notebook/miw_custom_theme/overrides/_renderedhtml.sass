@@ -1,0 +1,14 @@
+#miw
+  .rendered_html table
+    color: $COLOR_TEXT
+
+  .rendered_html thead
+    border-bottom: 1px solid $COLOR_GRAY
+
+  .rendered_html tbody tr
+    &:hover
+      background-color: rgba($COLOR_MAIN,0.2)
+  .rendered_html tbody tr:nth-child(odd)
+    background-color: $COLOR_GRAYLIGHT
+    &:hover
+      background-color: rgba($COLOR_MAIN,0.2)

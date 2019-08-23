@@ -30,9 +30,9 @@ define([
 
     SaveWidget.prototype.bind_events = function () {
         var that = this;
-        this.element.find('span.filename').click(function () {
-            that.rename_notebook({notebook: that.notebook});
-        });
+        // this.element.find('span.filename').click(function () {
+        //     that.rename_notebook({notebook: that.notebook});
+        // });
         this.events.on('notebook_loaded.Notebook', function () {
             that.update_notebook_name();
             that.update_document_title();
@@ -168,10 +168,10 @@ define([
         }
         this._render_checkpoint();
     };
-    
+
     SaveWidget.prototype._render_checkpoint = function () {
         /** actually set the text in the element, from our _checkpoint value
-        
+
         called directly, and periodically in timeouts.
         */
         this._schedule_render_checkpoint();
@@ -192,14 +192,14 @@ define([
             // <Today | yesterday|...> at hh,mm,ss
             human_date = chkd.calendar();
         }
-        
+
         el.text(i18n.msg.sprintf(i18n.msg._('Last Checkpoint: %s'),human_date)).attr('title', long_date);
     };
 
-    
+
     SaveWidget.prototype._schedule_render_checkpoint = function () {
         /** schedule the next update to relative date
-        
+
         periodically updated, so short values like 'a few seconds ago' don't get stale.
         */
         if (!this._checkpoint_date) {

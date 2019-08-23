@@ -387,35 +387,56 @@ class ContentsManager(LoggingConfigurable):
             untitled = self.untitled_file
         else:
             raise HTTPError(400, "Unexpected model type: %r" % model['type'])
-        
+
         name = self.increment_filename(untitled + ext, path, insert=insert)
         path = u'{0}/{1}'.format(path, name)
         return self.new(model, path)
-    
+
     def new(self, model=None, path=''):
         """Create a new file or directory and return its model with no content.
-        
+
         To create a new untitled entity in a directory, use `new_untitled`.
         """
         path = path.strip('/')
         if model is None:
             model = {}
-        
+
         if path.endswith('.ipynb'):
             model.setdefault('type', 'notebook')
         else:
             model.setdefault('type', 'file')
-        
+
         # no content, not a directory, so fill out new-file model
         if 'content' not in model and model['type'] != 'directory':
             if model['type'] == 'notebook':
-                model['content'] = new_notebook()
+                cell_content = [{
+                               "cell_type": "code",
+                               "execution_count": None,
+                               "metadata": {},
+                               "outputs": [],
+                               "source": [
+                                "# This Python 3 environment comes with many helpful analytics libraries installed\n",
+                                "# For example, here's several helpful packages to load in \n",
+                                "\n",
+                                "import numpy as np # linear algebra\n",
+                                "import pandas as pd # data processing\n",
+                                "\n",
+                                "# DatasetGroup have list of instance.\n",
+                                "# For example, select DatasetGroup and running this (by clicking run or pressing Shift+Enter) will get pandas.DataFrame.\n",
+                                "\n",
+                                "for dg in DatasetGroup:\n",
+                                "    print(dg.data_frame)\n",
+                                "\n",
+                                "# Any results you write to the current directory are saved as output."
+                               ]
+                              }]
+                model['content'] = new_notebook(cells=cell_content)
                 model['format'] = 'json'
             else:
                 model['content'] = ''
                 model['type'] = 'file'
                 model['format'] = 'text'
-        
+
         model = self.save(model, path)
         return model
 
