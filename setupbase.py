@@ -1,9 +1,7 @@
 # encoding: utf-8
 """
 This module defines the things that are used in setup.py for building the notebook
-
 This includes:
-
     * Functions for finding things like packages, package data, etc.
     * A function for checking dependencies.
 """
@@ -144,7 +142,7 @@ def find_package_data():
         pjoin(components, "jquery", "jquery.min.js"),
         pjoin(components, "jquery-typeahead", "dist", "jquery.typeahead.min.js"),
         pjoin(components, "jquery-typeahead", "dist", "jquery.typeahead.min.css"),
-        pjoin(components, "jquery-ui", "ui", "minified", "jquery-ui.min.js"),
+        pjoin(components, "jquery-ui", "jquery-ui.min.js"),
         pjoin(components, "jquery-ui", "themes", "smoothness", "jquery-ui.min.css"),
         pjoin(components, "jquery-ui", "themes", "smoothness", "images", "*"),
         pjoin(components, "marked", "lib", "marked.js"),
@@ -157,8 +155,9 @@ def find_package_data():
         pjoin(components, "underscore", "underscore-min.js"),
         pjoin(components, "moment", "moment.js"),
         pjoin(components, "moment", "min", "*.js"),
-        pjoin(components, "xterm.js", "dist", "xterm.js"),
-        pjoin(components, "xterm.js", "dist", "xterm.css"),
+        pjoin(components, "xterm.js", "index.js"),
+        pjoin(components, "xterm.js-css", "index.css"),
+        pjoin(components, "xterm.js-fit", "index.js"),
         pjoin(components, "text-encoding", "lib", "encoding.js"),
     ])
 
@@ -259,11 +258,9 @@ except ImportError:
         """Given a command, mode, and a PATH string, return the path which
         conforms to the given mode on the PATH, or None if there is no such
         file.
-
         `mode` defaults to os.F_OK | os.X_OK. `path` defaults to the result
         of os.environ.get("PATH"), or can be overridden with a custom search
         path.
-
         """
         # Check that a given file can be accessed with the correct mode.
         # Additionally check that `file` is not a directory, as on Windows
@@ -336,6 +333,30 @@ def run(cmd, *args, **kwargs):
     kwargs['shell'] = (sys.platform == 'win32')
     return check_call(cmd, *args, **kwargs)
 
+class CompileBackendTranslation(Command):
+    description = "compile the .po files into .mo files, that contain the translations."
+
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+
+    def run(self):
+        paths = glob('notebook/i18n/??_??')
+        for p in paths:
+            LANG = p[-5:]
+            for component in ['notebook', 'nbui']:
+                run(['pybabel', 'compile',
+                     '-D', component,
+                     '-f',
+                     '-l', LANG,
+                     '-i', pjoin('notebook', 'i18n', LANG, 'LC_MESSAGES', component+'.po'),
+                     '-o', pjoin('notebook', 'i18n', LANG, 'LC_MESSAGES', component+'.mo')
+                    ])
 
 class Bower(Command):
     description = "fetch static client-side components with bower"
@@ -400,7 +421,6 @@ class Bower(Command):
 
 def patch_out_bootstrap_bw_print():
     """Hack! Manually patch out the bootstrap rule that forces printing in B&W.
-
     We haven't found a way to override this rule with another one.
     """
     print_less = pjoin(static, 'components', 'bootstrap', 'less', 'print.less')
@@ -466,7 +486,7 @@ class CompileCSS(Command):
 
 
 class CompileJS(Command):
-    """Rebuild Notebook Javascript main.min.js files
+    """Rebuild Notebook Javascript main.min.js files and translation files.
     
     Calls require via build-main.js
     """
@@ -514,16 +534,27 @@ class CompileJS(Command):
                 print(source, target)
                 return True
         return False
-        
+
     def build_main(self, name):
         """Build main.min.js"""
         target = pjoin(static, name, 'js', 'main.min.js')
-        
+
         if not self.should_run(name, target):
             log.info("%s up to date" % target)
             return
         log.info("Rebuilding %s" % target)
         run(['node', 'tools/build-main.js', name])
+
+    def build_jstranslation(self, trd):
+        lang = trd[-5:]
+        run([
+            pjoin('node_modules', '.bin', 'po2json'),
+            '-p', '-F',
+            '-f', 'jed1.x',
+            '-d', 'nbjs',
+            pjoin('notebook', 'i18n', lang, 'LC_MESSAGES', 'nbjs.po'),
+            pjoin('notebook', 'i18n', lang, 'LC_MESSAGES', 'nbjs.json'),
+        ])
 
     def run(self):
         self.run_command('jsdeps')
@@ -531,6 +562,7 @@ class CompileJS(Command):
         env['PATH'] = npm_path
         pool = ThreadPool()
         pool.map(self.build_main, self.apps)
+        pool.map(self.build_jstranslation, glob('notebook/i18n/??_??'))
         # update package data in case this created new files
         update_package_data(self.distribution)
 
@@ -585,6 +617,7 @@ def css_js_prerelease(command, strict=False):
             try:
                 self.distribution.run_command('js')
                 self.distribution.run_command('css')
+                self.distribution.run_command('backendtranslations')
             except Exception as e:
                 # refresh missing
                 missing = [ t for t in targets if not os.path.exists(t) ]
