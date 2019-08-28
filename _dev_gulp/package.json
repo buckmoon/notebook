@@ -1,0 +1,22 @@
+{
+  "name": "public_html",
+  "version": "1.0.0",
+  "description": "Stylus Comp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-filter": "^4.0.0",
+    "gulp-plumber": "^1.2.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-sass-glob": "^1.0.9",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-watch": "^4.3.10",
+    "strip-bom": "^3.0.0"
+  }
+}
