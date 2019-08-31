@@ -80,7 +80,6 @@ data-notebook-path="{{notebook_path | urlencode}}"
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans %}File{% endtrans %}</a>
                     <ul id="file_menu" class="dropdown-menu">
                         <!-- <hr/> -->
-                        <li class="divider"></li>
                         <li id="save_checkpoint"><a href="#">{% trans %}Save and Checkpoint{% endtrans %}</a></li>
                         <!-- <hr/> -->
                         <li class="divider"></li>
@@ -258,7 +257,6 @@ data-notebook-path="{{notebook_path | urlencode}}"
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans %}Help{% endtrans %}</a>
                     <ul  id="help_menu" class="dropdown-menu">
                         {% block help %}
-                        <li id="notebook_tour" title="{% trans %}A quick tour of the notebook user interface{% endtrans %}"><a href="#">{% trans %}User Interface Tour{% endtrans %}</a></li>
                         <li id="keyboard_shortcuts" title="{% trans %}Opens a tooltip with all keyboard shortcuts{% endtrans %}"><a href="#">{% trans %}Keyboard Shortcuts{% endtrans %}</a></li>
                         <li id="edit_keyboard_shortcuts" title="{% trans %}Opens a dialog allowing you to edit Keyboard shortcuts{% endtrans %}"><a href="#">{% trans %}Edit Keyboard Shortcuts{% endtrans %}</a></li>
                         <li class="divider"></li>
@@ -596,7 +594,6 @@ var access_token = '{{ miw['password'] }}';
 
 
 var miw_dataset_group_id = "";
-var select_dataset_flag = null;
 
 $(function() {
   (function () {

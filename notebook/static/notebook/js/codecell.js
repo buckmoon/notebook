@@ -343,20 +343,16 @@ define([
         // modified at 9/22
         // console.log("miw_dataset_group_id :", miw_dataset_group_id)
         // console.log("this.get_text() :", this.get_text()f (miw_dataset_group_id != select_dataset_flag && miw_dataset_group_id != null){
-        if (miw_dataset_group_id != select_dataset_flag && miw_dataset_group_id != null){
-            var text = "import os,sys\n";
-            text += "sys.path.append(os.getenv('ML_FILE_PATH', ''))\n";
-            text += "import miw_utils\n";
-            text += "miw_dataset_group = miw_utils.entities.raw_data_groups.DBRawDataGroups.read_dataset_group(";
-            text += miw_dataset_group_id;
-            text += ")\n";
-            text += "DatasetGroup = miw_dataset_group.read() \n";
-            text += "access_token = \'" + access_token + "\'\n";
-            text += this.get_text();
-          select_dataset_flag = miw_dataset_group_id;
-        }else{
-          var text = this.get_text();
-        }
+        var text = "if not \"DatasetGroup\" in locals():\n"
+        text += " import os,sys\n";
+        text += " sys.path.append(os.getenv('ML_FILE_PATH', ''))\n";
+        text += " import miw_utils\n";
+        text += " miw_dataset_group = miw_utils.entities.raw_data_groups.DBRawDataGroups.read_dataset_group(";
+        text += miw_dataset_group_id;
+        text += ")\n";
+        text += " DatasetGroup = miw_dataset_group.read() \n";
+        text += " access_token = \'" + access_token + "\'\n";
+        text += this.get_text();
         // console.log("text :", text)
 
         this.last_msg_id = this.kernel.execute(text, callbacks, {silent: false, store_history: true,
